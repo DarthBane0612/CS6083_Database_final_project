@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.rental.mapper.CorporateMapper">
+
+    <resultMap type="com.car.rental.pojo.CorporatePojo" id="corporateMap">
+        <result property="customerId" column="customer_id"/>
+        <result property="name" column="name"/>
+        <result property="rNum" column="r_num"/>
+        <result property="empId" column="emp_id"/>
+        <result property="password" column="password"/>
+        <result property="username" column="username"/>
+
+        <result property="street" column="street"/>
+        <result property="city" column="city"/>
+        <result property="state" column="state"/>
+        <result property="zipCode" column="zip_code"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="type" column="type"/>
+    </resultMap>
+    <insert id="insertCorporate">
+        INSERT INTO car_rental.corporate
+            (customer_id, username, password, name, r_num, emp_id)
+        VALUES(#{customerId}, #{username}, #{password}, "c", "12", "0000");
+    </insert>
+    <select id="getCorporate" resultMap="corporateMap">
+        select cu.*,ind.* from corporate ind left join customer cu on ind.customer_id = cu.customer_id
+        where username = #{username} and password = #{password}
+    </select>
+    <select id="selectDiscount" resultMap="corporateMap">
+
+    </select>
+
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.rental.mapper.PaymentMapper">
+
+    <resultMap type="com.car.rental.pojo.PaymentPojo" id="paymentMap">
+        <result property="paymentId" column="PAYMENT_ID"/>
+        <result property="paymentDate" column="PAYMENT_DATE"/>
+        <result property="cardNum" column="CARD_NUM"/>
+        <result property="paymentMethod" column="PAYMENT_METHOD"/>
+        <result property="invoceInvoceId" column="INVOICE_INVOICE_ID"/>
+    </resultMap>
+    <insert id="insertPayment">
+        INSERT INTO car_rental.payment
+        (PAYMENT_ID, PAYMENT_DATE, PAYMENT_METHOD, CARD_NUM, INVOICE_INVOICE_ID)
+        VALUES(#{paymentId}, curdate(), #{cardType}, #{cardNum}, #{invoiceId});
+    </insert>
+
+    <select id="selectPaymentByInvoiced" resultMap="paymentMap">
+        select * from payment p where  p.INVOICE_INVOICE_ID =#{invoiceId}
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.rental.mapper.CouponMapper">
+
+    <resultMap type="com.car.rental.pojo.CouponPojo" id="couponMap">
+        <result property="couponId" column="COUPON_ID"/>
+        <result property="type" column="TYPE"/>
+        <result property="serviceId" column="SERVICE_ID"/>
+    </resultMap>
+    <insert id="createCoupon">
+        INSERT INTO car_rental.coupon
+            (COUPON_ID, `TYPE`, SERVICE_ID)
+        VALUES(#{couponId},#{type}, #{serviceId});
+    </insert>
+
+
+</mapper>

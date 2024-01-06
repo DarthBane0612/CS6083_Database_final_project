@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.rental.mapper.VehiclesMapper">
+
+    <resultMap type="com.car.rental.pojo.VehiclesPojo" id="vehiclesMap">
+        <result property="vin" column="vin"/>
+        <result property="officeId" column="office_id"/>
+        <result property="make" column="make"/>
+        <result property="model" column="model"/>
+        <result property="lpNum" column="l_p_num"/>
+        <result property="year" column="year"/>
+        <result property="rentalRate" column="rental_rate"/>
+        <result property="className" column="class_name"/>
+        <result property="num" column="num"/>
+        <result property="sOdometer" column="S_ODOMETER"/>
+    </resultMap>
+    <select id="getVehicles" resultMap="vehiclesMap" parameterType="java.lang.String">
+        select v.*,c.RENTAL_RATE ,c.OVER_MILEAGE_FEE ,oc.NUM  from vehicles v
+        left join class c on v.CLASS_NAME = c.CLASS_NAME
+        left join office_class oc on c.CLASS_NAME  = oc.CLASS_NAME
+        where 1 = 1
+        <if test="officeId!=null and officeId!=''">
+            and office_id = #{officeId}
+        </if>
+    </select>
+    <select id="selectsOdometerByVin" resultType="java.lang.String" parameterType="java.lang.String">
+        select S_ODOMETER from vehicles where vin = #{vin}
+    </select>
+
+
+</mapper>

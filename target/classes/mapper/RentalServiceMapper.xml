@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.rental.mapper.RentalServiceMapper">
+
+    <resultMap type="com.car.rental.pojo.RentalServicePojo" id="rentalServiceMap">
+        <result property="serviceId" column="SERVICE_ID"/>
+        <result property="sOdometer" column="S_ODOMETER"/>
+        <result property="eOdometer" column="E_ODOMTER"/>
+        <result property="limit" column="LIMIT"/>
+        <result property="customerId" column="CUSTOMER_ID"/>
+        <result property="vin" column="VIN"/>
+        <result property="rentalRate" column="RENTAL_RATE"/>
+        <result property="overMileageFee" column="OVER_MILEAGE_FEE"/>
+    </resultMap>
+
+
+    <insert id="createService">
+        INSERT INTO car_rental.rental_service
+            (SERVICE_ID, S_ODOMETER, E_ODOMTER, `LIMIT`, CUSTOMER_ID, VIN)
+        VALUES(#{serviceId}, #{sOdometer}, null, "500", #{customerId}, #{vin});
+
+    </insert>
+    <update id="updateEodometerByserviceId">
+        UPDATE car_rental.rental_service
+        SET  E_ODOMTER=#{eOdometer}
+        WHERE SERVICE_ID=#{serviceId};
+    </update>
+    <select id="getService" resultType="com.car.rental.pojo.RentalServicePojo">
+        SELECT rs.*,c.RENTAL_RATE,c.OVER_MILEAGE_FEE FROM rental_service rs
+        left join vehicles v on rs.VIN = v.VIN
+        left join class c on c.CLASS_NAME = v.CLASS_NAME WHERE 1= 1
+        <if test="customerId!=null and customerId!=''">
+            AND CUSTOMER_ID = #{customerId}
+        </if>
+    </select>
+    <select id="selectSodometerByserviceId" resultMap="rentalServiceMap"
+            parameterType="com.car.rental.pojo.RentalServicePojo">
+        select S_ODOMETER,`LIMIT` from rental_service where SERVICE_ID = #{serviceId}
+    </select>
+
+
+</mapper>
