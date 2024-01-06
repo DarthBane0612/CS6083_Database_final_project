@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.rental.mapper.OfficeMapper">
+
+    <resultMap type="com.car.rental.pojo.OfficePojo" id="officeMap">
+        <result property="officeId" column="OFFICE_ID"/>
+        <result property="street" column="STREET"/>
+        <result property="city" column="CITY"/>
+        <result property="state" column="STATE"/>
+        <result property="zipCode" column="ZIP_CODE"/>
+        <result property="phone" column="PHONE"/>
+        <result property="locName" column="LOC_NAME"/>
+        <result property="type" column="TYPE"/>
+        <result property="serviceId" column="SERVICE_ID"/>
+    </resultMap>
+    <select id="getOffice" resultMap="officeMap">
+        select  * from office;
+    </select>
+
+
+
+</mapper>

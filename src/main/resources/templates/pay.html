@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>pay</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+</head>
+<body>
+
+<div style="padding: 16px;">
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+<div class="request clearfix layer-pop" id="receiveRequest" style="display:none;padding:20px;">
+    <form class="layui-form" action="">
+        <div class="layui-input-group">
+            <div class="layui-input-split layui-input-prefix">
+                invoice_id:
+            </div>
+            <input type="text" class="layui-input" name="invoiceId" id="invoiceId">
+        </div>
+        <div class="layui-form">
+            <input type="radio" name="cardType" value="1" title="credit_card">
+            <input type="radio" name="cardType" value="2" title="debit_card" checked>
+        </div>
+        <div class="layui-input-group">
+            <div class="layui-input-split layui-input-prefix">
+                cardNum：
+            </div>
+            <input type="text" class="layui-input" name="cardNum">
+        </div>
+        <div class="layui-form-item">
+            <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit="" lay-filter="pay"
+                    style="width: 600px">pay</button>
+        </div>
+    </form>
+</div>
+<div class="request clearfix layer-pop" id="detailRequest" style="display:none;padding:20px;">
+    <form class="layui-form" action="">
+        <div class="layui-input-group">
+            <div class="layui-input-split layui-input-prefix">
+                payment_id:
+            </div>
+            <input type="text" class="layui-input" name="invoiceId" id="paymentId">
+        </div>
+        <div class="layui-input-group">
+            <div class="layui-input-split layui-input-prefix">
+                payment_method:
+            </div>
+            <input type="text" class="layui-input" name="invoiceId" id="paymentMethod">
+        </div>
+        <div class="layui-input-group">
+            <div class="layui-input-split layui-input-prefix">
+                card_num:
+            </div>
+            <input type="text" class="layui-input" name="card_num" id="cardNum">
+        </div>
+        <div class="layui-input-group">
+            <div class="layui-input-split layui-input-prefix">
+                payment_date:
+            </div>
+            <input type="text" class="layui-input" name="payment_date" id="paymentDate">
+        </div>
+    </form>
+</div>
+<script th:src="@{/jquery-1.10.2.min.js}" charset="utf-8"></script>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/jquery.particleground.min.js}" charset="utf-8"></script>
+<script type="text/html" id="barDemo">
+    <div class="layui-clear-space">
+        <a class="layui-btn layui-btn-xs" lay-event="pay">pay</a>
+        <a class="layui-btn layui-btn-xs" lay-event="detail">detail</a>
+    </div>
+</script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        var dropdown = layui.dropdown;
+        table.render({
+            elem: '#test'
+            ,height: 1800
+            ,url: '/rent/getInvoice'
+            ,page: false
+            ,cols: [
+                [
+                    {field: 'invoiceId', title: 'invoiceId', width:130, sort: true, fixed: 'left'}
+                    ,{field: 'invoiceDate', title: 'invoiceDate', width:110}
+                    ,{field: 'invoiceAmount', title: 'invoiceAmount', width:260}
+                    ,{field: 'serviceId', title: 'serviceId', width:180}
+                    ,{fixed: 'right', title:'operate', width: 180, minWidth: 125, toolbar: '#barDemo'}
+                ]]
+        });
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'pay'){
+                layer.open({
+                    type: 1,
+                    area: ['600px', '300px'],
+                    title: 'Hello layer',
+                    shade: 0.6,
+                    shadeClose: true,
+                    maxmin: true,
+                    anim: 0,
+                    content: $('#receiveRequest'),
+                    success: function () {
+                        document.getElementById("invoiceId").value=data.invoiceId;
+                    },
+                })
+            }
+            if(obj.event === 'detail'){
+                $.ajax({
+                    type: 'get',
+                    url: '/rent/getPayDetail',
+                    async: false,
+                    dateType: "json",
+                    data:data,
+                    success : function(result) {
+                        if(result!=""){
+                            layer.open({
+                                type: 1,
+                                area: ['600px', '300px'],
+                                title: 'Hello layer',
+                                shade: 0.6,
+                                shadeClose: true,
+                                maxmin: true,
+                                anim: 0,
+                                content: $('#detailRequest'),
+                                success: function () {
+                                    document.getElementById("paymentId").value=result.paymentId;
+                                    document.getElementById("paymentMethod").value=result.paymentMsg;
+                                    document.getElementById("cardNum").value=result.cardNum;
+                                    document.getElementById("paymentDate").value=result.paymentDate;
+                                },
+                            })
+                        }else{
+                            layer.open({
+                                type: 1,
+                                area: ['500px', '300px'],
+                                title: 'Hello layer',
+                                shade: 0.6,
+                                shadeClose: true,
+                                maxmin: true,
+                                anim: 0,
+                                content: '<div style="padding: 32px;">Order not paid</div>'
+                            });
+                        }
+                    },
+                });
+            }
+        });
+
+    });
+
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        form.on('submit(pay)', function (data) {
+            data = data.field;
+            console.log(data);
+            $.ajax({
+                type: 'get',
+                url: '/rent/getPay',
+                async: false,//同步，
+                dataType:"text",
+                data:data,
+                success : function(data) {
+                    if(data>0){
+                        alert("succeed")
+                    }else{
+                        alert("The order has been paid")
+                    }
+                },
+            });
+        });
+    });
+</script>
+</body>
+</html>

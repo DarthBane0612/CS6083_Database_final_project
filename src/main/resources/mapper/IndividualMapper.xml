@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.rental.mapper.IndividualMapper">
+
+    <resultMap type="com.car.rental.pojo.IndividualPojo" id="individualMap">
+        <result property="customerId" column="customer_id"/>
+        <result property="fname" column="fname"/>
+        <result property="mname" column="mname"/>
+        <result property="lname" column="lname"/>
+        <result property="dlNum" column="dl_num"/>
+        <result property="inCompany" column="in_company"/>
+        <result property="policy" column="policy"/>
+        <result property="password" column="password"/>
+        <result property="username" column="username"/>
+        <result property="street" column="street"/>
+        <result property="city" column="city"/>
+        <result property="state" column="state"/>
+        <result property="zipCode" column="zip_code"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="type" column="type"/>
+
+    </resultMap>
+    <insert id="insertIndividual">
+        INSERT INTO car_rental.individual
+        ( customer_id,username, password, fname, mname, lname, dl_num, in_company, policy)
+        VALUES( #{customerId},#{username}, #{password}, "che", "f", "1", "1", "rs","1")
+    </insert>
+    <select id="getIndividual" resultType="com.car.rental.pojo.IndividualPojo">
+        select cu.*,ind.* from individual ind left join customer cu on ind.customer_id = cu.customer_id
+                                                           where username = #{username} and password = #{password}
+    </select>
+
+
+</mapper>

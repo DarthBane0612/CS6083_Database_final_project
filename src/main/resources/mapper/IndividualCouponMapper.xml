@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.rental.mapper.IndividualCouponMapper">
+
+    <resultMap type="com.car.rental.pojo.IndividualCouponPojo" id="individualCouponMap">
+        <result property="couponId" column="COUPON_ID"/>
+        <result property="validFrom" column="VALID_FROM"/>
+        <result property="validTo" column="VALID_TO"/>
+        <result property="discount" column="DISCOUNT"/>
+        <result property="serviceId" column="SERVICE_ID"/>
+    </resultMap>
+    <insert id="individualCoupon">
+        INSERT INTO car_rental.individual_coupon
+            (COUPON_ID, VALID_FROM, VALID_TO, DISCOUNT)
+        VALUES(#{couponId}, curdate(), date_add(curdate(), INTERVAL 1 day), #{discount});
+    </insert>
+    <select id="selectDiscount" resultMap="individualCouponMap">
+        select * from individual_coupon ic left join coupon c on ic.COUPON_ID = c.COUPON_ID
+        where 1 = 1
+        <if test="serviceId!=null and serviceId!=''">
+           and  c.SERVICE_ID =#{serviceId}
+        </if>
+        and  ic.VALID_TO >curdate()
+    </select>
+
+
+</mapper>

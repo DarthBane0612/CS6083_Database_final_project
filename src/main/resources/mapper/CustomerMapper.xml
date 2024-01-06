@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.car.rental.mapper.CustomerMapper">
+
+    <resultMap type="com.car.rental.pojo.CustomerPojo" id="customerMap">
+        <result property="customerId" column="customer_id"/>
+        <result property="street" column="street"/>
+        <result property="city" column="city"/>
+        <result property="state" column="state"/>
+        <result property="zipCode" column="zip_code"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="type" column="type"/>
+    </resultMap>
+    <insert id="insert">
+        INSERT INTO car_rental.customer
+            (customer_id, street, city, `state`, zip_code, phone, email, `type`)
+        VALUES(#{customerId}, "sd", "sd", "sd", "sd",#{phone}, "sd", #{type});
+    </insert>
+
+
+</mapper>
